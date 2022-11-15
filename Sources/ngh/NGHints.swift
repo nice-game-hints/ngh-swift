@@ -2,8 +2,15 @@
 import JXKit
 import Foundation
 
+public struct Hint {
+  public var title: String
+  public var content: String
+  public var spoiler: Bool
+}
+
 public struct Guide {
   public var title: String
+  public var hints: Array<Hint>
 }
 
 public struct NGHints {
@@ -39,7 +46,12 @@ public struct NGHints {
     assert(getGuides.isFunction == true)
     let guides = try getGuides.call(this: nghHints)
     return try guides.array.map { (jxG) -> Guide in return Guide(
-      title: try jxG["title"].string
+      title: try jxG["title"].string,
+      hints: try jxG["hints"].array.map { (jxH) -> Hint in return Hint(
+        title: try jxH["title"].string,
+        content: try jxH["content"].string,
+        spoiler: try jxH["spoiler"].bool
+      )}
     )}
   }
 }
