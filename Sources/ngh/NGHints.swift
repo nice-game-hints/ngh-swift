@@ -16,6 +16,7 @@ public struct Guide {
 public struct NGHints {
   public private(set) var text = "Hello, World!"
   private var nghHints: JXValue
+  private var jsc: JXContext
 
   public init(nghFiles: [String: String]) throws {
     // mod.js is the ngh-js bundled file
@@ -32,7 +33,7 @@ public struct NGHints {
     }
 
     // Read the exports default to JXValue
-    let jsc = JXContext()
+    jsc = JXContext()
     try jsc.eval("module = { exports: {} }")
     try jsc.eval(inString)
     let e = try jsc.global["module"]["exports"]
@@ -41,10 +42,10 @@ public struct NGHints {
     nghHints = try jsNGHints.construct(withArguments: try [ jsc.encode(nghFiles) ])
   }
 
-  func getGuides () throws -> Array<Guide> {
+  func getGuides (progress: [String: Bool] = [:]) throws -> Array<Guide> {
     let getGuides = try nghHints["getGuides"]
     assert(getGuides.isFunction == true)
-    let guides = try getGuides.call(this: nghHints)
+    let guides = try getGuides.call(withArguments: try [ jsc.encode(progress) ], this: nghHints)
     return try guides.array.map { (jxG) -> Guide in return Guide(
       title: try jxG["title"].string,
       hints: try jxG["hints"].array.map { (jxH) -> Hint in return Hint(
