@@ -51,5 +51,6 @@ Text B2
         XCTAssertEqual(try target.getGuides(progress: [ "prg-a": true ])[1].title, "TitleB")
         XCTAssertEqual(try target.getGuides(progress: [ "prg-a": true ])[1].hints.count, 1)
         XCTAssertEqual(try target.getGuides(progress: [ "prg-a": true, "prg-x": true ])[1].hints.count, 2)
+        XCTAssertEqual(try target.getGuides(progress: [ "prg-a": true, "prg-x": true, "prg-non-existing": true ])[1].hints.count, 2)
     }
 }
