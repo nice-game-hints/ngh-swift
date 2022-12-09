@@ -13,6 +13,27 @@ public struct Guide {
   public var hints: Array<Hint>
 }
 
+public func hintFiles(resourceUrl:URL) throws -> [String:String] {
+    let fm      = FileManager.default
+    let items   = try fm.contentsOfDirectory(atPath: resourceUrl.path)
+    print("Found following items:")
+    print(items)
+
+    var nghFiles: [ String: String ] = [:]
+    
+    for item in items {
+        // print("Found \(item)")
+        let contents = fm.contents(atPath: "\(resourceUrl.path)/\(item)")
+        // print(String(data: contents!, encoding:.utf8)!)
+        nghFiles[item] = String(data: contents!, encoding:.utf8)!
+    }
+    return nghFiles
+}
+
+public func hintFiles(at folderReference:String) throws -> [String:String] {
+  return try hintFiles(resourceUrl: Bundle.main.resourceURL!.appendingPathComponent(folderReference))
+}
+
 public struct NGHints {
   public private(set) var text = "Hello, World!"
   private var nghHints: JXValue

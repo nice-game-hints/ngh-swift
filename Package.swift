@@ -26,7 +26,10 @@ let package = Package(
         ),
         .testTarget(
             name: "rootTests",
-            dependencies: ["ngh"]
+            dependencies: ["ngh"],
+            resources: [
+              .copy("fixtures")
+            ]
         ),
     ]
 )
