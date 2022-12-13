@@ -17,4 +17,12 @@ final class rootTests: XCTestCase {
         XCTAssertEqual(try target.getGuides(progress: [ "prg-a": true, "prg-x": true ])[1].hints.count, 2)
         XCTAssertEqual(try target.getGuides(progress: [ "prg-a": true, "prg-x": true, "prg-non-existing": true ])[1].hints.count, 2)
     }
+    func testTranslation() throws {
+        let testFixtureFolder = Bundle.module.resourceURL!.appendingPathComponent("fixtures/basic")
+        print(testFixtureFolder)
+        let files = try hintFiles(resourceUrl: testFixtureFolder)
+        let target = try NGHints(nghFiles: files, lang: "fi")
+        XCTAssertEqual(try target.getGuides().count, 1)
+        XCTAssertEqual(try target.getGuides()[0].title, "FinA")
+    }
 }

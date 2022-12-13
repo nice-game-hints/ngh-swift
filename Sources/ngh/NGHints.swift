@@ -39,7 +39,7 @@ public struct NGHints {
   private var nghHints: JXValue
   private var jsc: JXContext
 
-  public init(nghFiles: [String: String]) throws {
+  public init(nghFiles: [String: String], lang: String? = nil) throws {
     // mod.js is the ngh-js bundled file
     guard let fileURL = Bundle.module.url(forResource: "bundle", withExtension: "js") else {
         fatalError("Not able to create URL for bundled js")
@@ -60,7 +60,7 @@ public struct NGHints {
     let e = try jsc.global["module"]["exports"]
     let jsNGHints = try e["NGHints"]
     assert(jsNGHints.isConstructor == true)
-    nghHints = try jsNGHints.construct(withArguments: try [ jsc.encode(nghFiles) ])
+    nghHints = try jsNGHints.construct(withArguments: try [ jsc.encode(nghFiles), lang ])
   }
 
   func getGuides (progress: [String: Bool] = [:]) throws -> Array<Guide> {
