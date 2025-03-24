@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "NGHints",
+    platforms: [ .macOS(.v10_15), .iOS(.v13), .tvOS(.v13) ], // these are copied from JXKit package as we rely heavily on it
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
